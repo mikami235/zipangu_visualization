@@ -5,9 +5,6 @@ import matplotlib.pyplot as plt
 import argparse
 
 def get_args():
-    """
-    プログラムの引数を決定する関数。
-    """
     parser = argparse.ArgumentParser()
     # parser=parser.add_parser("main")
     parser.add_argument('--use_acc', action='store_true',
@@ -18,15 +15,26 @@ def get_args():
                         help="Whether to visualize wx,wy,wz or not")
     parser.add_argument('--use_P', action='store_true',
                         help="Whether to visualize P or not")
+    parser.add_argument('--load_dir', default='log_example/',
+                        help="Whether to visualize P or not")
+
+    args = parser.parse_args()
+    return args
 
 
 if __name__ == '__main__':
     logging.basicConfig(level=logging.DEBUG)
-    #グラフに単位をつける。
-    #一枚のpngに、複数枚のグラフを用意する。
-    #関数化して、web_UIでアクセスできるようにする。
+    # グラフに単位をつける。
+    # 一枚のpngに、複数枚のグラフを用意する。
+    # 関数化して、web_UIでアクセスできるようにする。
 
-    df_acc = pd.read_csv("00036/acc_gyro.csv")
+    args = get_args()
+    print(args)
+    data_dir = str(args.load_dir)
+    logging.info(data_dir)
+    #df_acc = pd.read_csv("00036/acc_gyro.csv")
+    acc_file_dir = data_dir + "/acc_gyro.csv"
+    df_acc = pd.read_csv(acc_file_dir)
     logging.info("df_acc")
     logging.info(df_acc.shape)
     
@@ -74,7 +82,11 @@ if __name__ == '__main__':
 
     plt.savefig("m_sample_36.png")
 
-    df_landing = pd.read_csv("00036/landing_detection.csv")
+    landing_file_dir = data_dir + "/landing_detection.csv"
+
+    #df_landing = pd.read_csv("00036/landing_detection.csv")
+    df_landing = pd.read_csv(landing_file_dir)
+
     logging.info("df_landing")
     logging.info(df_landing.shape)
     
