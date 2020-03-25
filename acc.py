@@ -4,6 +4,20 @@ import logging
 import matplotlib.pyplot as plt
 import argparse
 
+import folium
+
+def mapping_rover(latitude,longtude):
+    #atitude = 35.710063
+    #longtude = 139.8107
+    name = "東京スカイツリー"
+ 
+    map = folium.Map(location=[latitude, longtude], zoom_start=18)
+    folium.Marker(location=[latitude, longtude], popup=name).add_to(map)
+    
+    map.save("map_skytree.html")
+
+
+
 def get_args():
     parser = argparse.ArgumentParser()
     # parser=parser.add_parser("main")
@@ -15,7 +29,7 @@ def get_args():
                         help="Whether to visualize wx,wy,wz or not")
     parser.add_argument('--use_P', action='store_true',
                         help="Whether to visualize P or not")
-    parser.add_argument('--load_dir', default='log_example/',
+    parser.add_argument('--load_dir', default='log_example',
                         help="Whether to visualize P or not")
 
     args = parser.parse_args()
@@ -32,7 +46,6 @@ if __name__ == '__main__':
     print(args)
     data_dir = str(args.load_dir)
     logging.info(data_dir)
-    #df_acc = pd.read_csv("00036/acc_gyro.csv")
     acc_file_dir = data_dir + "/acc_gyro.csv"
     df_acc = pd.read_csv(acc_file_dir)
     logging.info("df_acc")
@@ -52,7 +65,7 @@ if __name__ == '__main__':
     ax.plot(X,y_3)
     ax.legend(loc='best')
 
-    plt.savefig("ax_sample_36.png")
+    plt.savefig("ax_sample_"+str(data_dir)+".png")
 
 
     fig = plt.figure()
@@ -66,7 +79,7 @@ if __name__ == '__main__':
     ax.plot(X,y_3, label="wz")
     ax.legend(loc='best')
 
-    plt.savefig("w_sample_36.png")
+    plt.savefig("w_sample_"+str(data_dir)+".png")
 
 
     fig = plt.figure()
@@ -80,11 +93,10 @@ if __name__ == '__main__':
     ax.plot(X,y_3, label="mz")
     ax.legend(loc='best')
 
-    plt.savefig("m_sample_36.png")
+    plt.savefig("m_sample_"+str(data_dir)+".png")
 
     landing_file_dir = data_dir + "/landing_detection.csv"
 
-    #df_landing = pd.read_csv("00036/landing_detection.csv")
     df_landing = pd.read_csv(landing_file_dir)
 
     logging.info("df_landing")
@@ -107,4 +119,8 @@ if __name__ == '__main__':
     ax.plot(X,y_4)
     ax.legend(loc='best')
 
-    plt.savefig("p_sample_36.png")
+    plt.savefig("p_sample_"+str(data_dir)+".png")
+
+    y_1 = df_acc["lat"][0]
+    y_2 = df_acc["lng"][1]
+    mapping_rover(y_1,y_2)
