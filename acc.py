@@ -24,7 +24,6 @@ def mapping_rover(latitude_list,longtude_list):
     map.save(filename)
 
 
-
 def get_args():
     parser = argparse.ArgumentParser()
     # parser=parser.add_parser("main")
@@ -64,20 +63,23 @@ if __name__ == '__main__':
     fig = plt.figure()
     ax = fig.add_subplot(1,1,1)
     X = df_acc["timestamp"]
+    X = X - X[0] #offset
+
     y_1 = df_acc["ax"]
     y_2 = df_acc["ay"]
     y_3 = df_acc["az"]
     ax.plot(X,y_1, label="ax")
-    ax.plot(X,y_2)
-    ax.plot(X,y_3)
+    ax.plot(X,y_2, label="ay")
+    ax.plot(X,y_3, label="az")
     ax.legend(loc='best')
+    ax.set_xlabel("time [ms]")
+    ax.set_ylabel("accel [m/s^2]")
 
     plt.savefig("ax_sample_"+str(data_dir)+".png")
 
 
     fig = plt.figure()
     ax = fig.add_subplot(1,1,1)
-    X = df_acc["timestamp"]
     y_1 = df_acc["wx"]
     y_2 = df_acc["wy"]
     y_3 = df_acc["wz"]
@@ -85,13 +87,14 @@ if __name__ == '__main__':
     ax.plot(X,y_2, label="wy")
     ax.plot(X,y_3, label="wz")
     ax.legend(loc='best')
+    ax.set_xlabel("time [ms]")
+    ax.set_ylabel("angle velocity [rad/s]")
 
     plt.savefig("w_sample_"+str(data_dir)+".png")
 
 
     fig = plt.figure()
     ax = fig.add_subplot(1,1,1)
-    X = df_acc["timestamp"]
     y_1 = df_acc["mx"]
     y_2 = df_acc["my"]
     y_3 = df_acc["mz"]
@@ -99,6 +102,8 @@ if __name__ == '__main__':
     ax.plot(X,y_2, label="my")
     ax.plot(X,y_3, label="mz")
     ax.legend(loc='best')
+    ax.set_xlabel("time [ms]")
+    ax.set_ylabel("B(magnetic flux density) [micro T]")
 
     plt.savefig("m_sample_"+str(data_dir)+".png")
 
@@ -115,21 +120,22 @@ if __name__ == '__main__':
     fig = plt.figure()
     ax = fig.add_subplot(1,1,1)
     X = df_landing["timestamp"]
+    X = X - X[0]
     y_1 = df_landing["P(highest)"]
     y_2 = df_landing["P(freefall)"]
     y_3 = df_landing["P(landed_bytime)"]
     y_4 = df_landing["P(landed_byimpact)"]
 
-    ax.plot(X,y_1, label="ax")
-    ax.plot(X,y_2)
-    ax.plot(X,y_3)
-    ax.plot(X,y_4)
+    ax.plot(X,y_1, label="P(highest)")
+    ax.plot(X,y_2, label="P(freefall)")
+    ax.plot(X,y_3, label="P(landed_by_time)")
+    ax.plot(X,y_4, label="P(landed_by_impact)")
     ax.legend(loc='best')
+    ax.set_xlabel("time [ms]")
+    ax.set_ylabel("Score")
 
     plt.savefig("p_sample_"+str(data_dir)+".png")
 
-    #y_1 = df_acc["lat"][0]
-    #y_2 = df_acc["lng"][1]
     y_1 = list(df_acc["lat"])
     y_2 = list(df_acc["lng"])
     mapping_rover(y_1,y_2)
