@@ -6,15 +6,22 @@ import argparse
 
 import folium
 
-def mapping_rover(latitude,longtude):
+def mapping_rover(latitude_list,longtude_list):
     #atitude = 35.710063
     #longtude = 139.8107
-    name = "東京スカイツリー"
+    latitude_center = latitude_list[0]
+    longtude_center = longtude_list[0]
+    name = "ローバー"
+    logging.info("latitude_list")
+    logging.info(latitude_list)
  
-    map = folium.Map(location=[latitude, longtude], zoom_start=18)
-    folium.Marker(location=[latitude, longtude], popup=name).add_to(map)
+    map = folium.Map(location=[latitude_center, longtude_center], zoom_start=18)
     
-    map.save("map_skytree.html")
+    for i in range(len(latitude_list)):
+        folium.Marker(location=[latitude_list[i], longtude_list[i]], popup=name).add_to(map)
+    
+    filename = "map_rover.html"
+    map.save(filename)
 
 
 
@@ -121,6 +128,8 @@ if __name__ == '__main__':
 
     plt.savefig("p_sample_"+str(data_dir)+".png")
 
-    y_1 = df_acc["lat"][0]
-    y_2 = df_acc["lng"][1]
+    #y_1 = df_acc["lat"][0]
+    #y_2 = df_acc["lng"][1]
+    y_1 = list(df_acc["lat"])
+    y_2 = list(df_acc["lng"])
     mapping_rover(y_1,y_2)
